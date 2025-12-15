@@ -5,7 +5,7 @@ service cloud.firestore {
 
     match /challenges/{challengeId} {
       allow read: if true;
-      allow create: if request.auth != null;
+      allow create, update, delete: if get(/databases/$(database)/documents/players/$(request.auth.uid)).data.role == 'admin';
     }
 
     match /players/{playerId} {

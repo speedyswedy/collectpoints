@@ -1,79 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { db } from '../firebase/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { signOut } from "firebase/auth";
+import { auth } from '../firebase/firebase';
+import { useAuth } from '../context/AuthContext';
+import './Layout.css';
 
 const Layout = ({ children }) => {
-  const [playerId, setPlayerId] = useState(null);
-  const [userRole, setUserRole] = useState(null);
+  const { currentUser, userRole } = useAuth();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const updatePlayerIdAndRole = async () => {
-      const storedPlayerId = localStorage.getItem('playerId');
-      setPlayerId(storedPlayerId);
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+    setIsMenuOpen(false); // Close menu on logout
+  };
 
-      if (storedPlayerId) {
-        const docRef = doc(db, 'players', storedPlayerId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserRole(docSnap.data().role);
-        } else {
-          setUserRole(null);
-        }
-      } else {
-        setUserRole(null);
-      }
-    };
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-    updatePlayerIdAndRole();
-
-    window.addEventListener('playerIdChanged', updatePlayerIdAndRole);
-    window.addEventListener('storage', updatePlayerIdAndRole);
-
-    return () => {
-      window.removeEventListener('playerIdChanged', updatePlayerIdAndRole);
-      window.removeEventListener('storage', updatePlayerIdAndRole);
-    };
-  }, []);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  }
 
   return (
-    <div>
-      <header>
-        <h1>Mossen F10/F11 JuleChallenge</h1>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/">Hem</NavLink>
-            </li>
-            {!playerId && (
-              <li>
-                <NavLink to="/register">Registrera</NavLink>
-              </li>
-            )}
-            <li>
-              <NavLink to="/challenges">Utmaningar</NavLink>
-            </li>
-            <li>
-              <NavLink to="/leaderboard">Poängtavla</NavLink>
-            </li>
-            {playerId && (
-              <>
-                <li>
-                  <NavLink to="/my-profile">Min Sida</NavLink>
-                </li>
-                {userRole === 'admin' && (
-                  <li>
-                    <NavLink to="/create-challenge">Skapa Utmaning</NavLink>
-                  </li>
-                )}
-              </>
-            )}
-          </ul>
+    <div className="layout">
+      <header className="app-header">
+        <div className="logo-container">
+          <NavLink to="/" onClick={closeMenu}>
+            <img src="https://assets.app.veo.co/crests/mossens-bk/mossen.jpg" alt="Mossen BK Logo" className="logo" />
+          </NavLink>
+          <span className="logo-text">Mossen F10/F11 JuleChallenge</span>
+        </div>
+
+        <button className="menu-toggle" onClick={toggleMenu}>
+          <span className="material-icons">{isMenuOpen ? 'close' : 'menu'}</span>
+        </button>
+
+        <nav className={`main-nav ${isMenuOpen ? 'is-open' : ''}`}>
+          <NavLink to="/" onClick={closeMenu}>Hem</NavLink>
+          <NavLink to="/challenges" onClick={closeMenu}>Utmaningar</NavLink>
+          <NavLink to="/leaderboard" onClick={closeMenu}>Poängtavla</NavLink>
+          {userRole === 'admin' && (
+            <NavLink to="/create-challenge" onClick={closeMenu}>Skapa Utmaning</NavLink>
+          )}
+           <div className="user-actions-mobile">
+              {currentUser ? (
+                <>
+                  <NavLink to="/my-profile" onClick={closeMenu}>Min Profil</NavLink>
+                  <button onClick={handleLogout} className="btn btn-secondary">Logga Ut</button>
+                </>
+              ) : (
+                <>
+                  <NavLink to="/login" className="btn btn-secondary" onClick={closeMenu}>Logga In</NavLink>
+                  <NavLink to="/register" className="btn btn-primary" onClick={closeMenu}>Registrera</NavLink>
+                </>
+              )}
+          </div>
         </nav>
+
+        <div className="user-actions-desktop">
+          {currentUser ? (
+            <>
+              <NavLink to="/my-profile" className="user-link">Min Profil</NavLink>
+              <button onClick={handleLogout} className="btn btn-secondary">Logga Ut</button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className="btn btn-secondary">Logga In</NavLink>
+              <NavLink to="/register" className="btn btn-primary">Registrera</NavLink>
+            </>
+          )}
+        </div>
       </header>
-      <main>{children}</main>
-      <footer>
-        <p>Skapad för Mossens BK F10/F11</p>
+      <main className="main-content">{children}</main>
+       <footer className="app-footer">
+        <p>&copy; 2024 Mossen BK F10/F11. Alla rättigheter förbehållna.</p>
       </footer>
     </div>
   );

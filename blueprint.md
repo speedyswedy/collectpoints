@@ -2,51 +2,43 @@
 
 ## Projektöversikt
 
-En webbapplikation för fotbollslaget Mossen F10/F11 för att hantera en träningsutmaning under julledigheten. Appen är byggd med React och Firebase, med fokus på enkelhet och en bra användarupplevelse utan traditionell inloggning.
+En webbapplikation för fotbollslaget Mossen F10/F11 för att hantera en träningsutmaning under julledigheten. Appen är byggd med React och Firebase och använder e-post/lösenordsautentisering för att säkerställa att användare kan komma åt sina profiler från olika enheter.
 
 ## Applikationsdesign och Funktioner
 
-### Design och Stil
-- **Gränssnitt:** Modernt, mobilvänligt och intuitivt med en ren layout och tydlig navigering.
-- **Styling:** Global CSS används för ett enhetligt utseende med subtila skuggor, responsiva element och interaktiva effekter för knappar och länkar.
-- **Layout:** En huvudlayout med en header som innehåller appens titel och navigering, ett huvudområde för sidinnehåll och en sidfot.
+### Designfilosofi
+Applikationen har en modern, professionell och enhetlig design med ett konsekvent användargränssnitt över alla sidor. Designen balanserar ett kort-baserat system för innehållsblock med en ren, professionell tabellvy för listdata, vilket skapar en organiserad och visuellt tilltalande upplevelse.
+
+### Global Styling
+- **Centraliserad CSS:** All styling hanteras globalt från `src/App.css`, vilket säkerställer konsekvens och förenklar underhåll.
+- **CSS Custom Properties (Variabler):** En global palett för färger (`--primary-color`, `--card-background`), skuggor (`--box-shadow`), och radier (`--border-radius`) är definierad för att enkelt kunna justera appens utseende.
+- **Layout-behållare:** Klassen `.page-container` används för att centrera och ge konsekvent luft åt innehållet på alla sidor.
+
+### Komponenter & Layout
+- **Kort-baserad UI:** De flesta innehållsblock, såsom utmaningar (`.challenge-item`) och formulär (`.form-container`), renderas som "kort" med enhetliga skuggor och rundade hörn.
+- **Professionell Poängtavla:** Poängtavlan (`.leaderboard-container`) presenteras i en ren och lättläst tabell-layout, inkapslad i en kort-behållare för att matcha den övergripande designen.
+- **Enhetliga Knappar:** Alla knappar använder `.btn`-klassen för ett konsekvent utseende, med färgvariationer för olika syften och interaktiva hover-effekter.
+- **Responsivitet:** Designen är fullt responsiv och anpassar sig för en optimal upplevelse på både mobila enheter och större skärmar.
 
 ### Funktioner
-- **Spelarregistrering:** Spelare kan registrera sig med namn och e-post. Ett unikt ID genereras och lagras lokalt i webbläsarens `localStorage` för att "komma ihåg" spelaren.
-- **Redigera Spelare:** Inloggade spelare kan redigera sitt namn och sin e-post på en egen profilsida.
-- **Utmaningar:** En lista med utmaningar (titel, beskrivning, poäng) hämtas från Firebase. Spelare kan markera utmaningar som slutförda för att samla poäng.
-- **Poängregistrering:** Poäng och slutförda utmaningar uppdateras i realtid i Firebase. Appen använder optimistiska uppdateringar för en snabbare känsla.
-- **Poängtavla (Leaderboard):** En offentlig topplista visar alla spelares namn och deras totala poäng, sorterat från högst till lägst.
-- **Dynamisk Navigering:** Navigationsfältet anpassas beroende på om en spelare är "inloggad" (har ett `playerId` i `localStorage`).
+- **Användarhantering (E-post/Lösenord):** Registrering, inloggning och utloggning, med stöd för `player`- och `admin`-roller.
+- **Profilhantering:** Spelare kan redigera sitt namn på sin profilsida.
+- **Utmaningshantering:** Administratörer kan skapa, redigera och ta bort utmaningar. Spelare kan se och slutföra utmaningar.
+- **Poängsystem:** Poäng uppdateras i realtid. Poängtavlan visar alla spelares ranking och poäng.
+- **Dynamisk Navigering:** Navigationsfältet anpassas efter användarens status och roll.
 
-## Plan för Implementation (Slutförd)
+---
 
-### Steg 1: Projekt-setup och grundläggande struktur
-- Installerade `react-router-dom`.
-- Skapade en logisk mappstruktur (`components`, `pages`, `firebase`).
-- Implementerade routing och skapade grundläggande sidkomponenter.
+## Senaste Genomförda Ändringar: Tabbvy för Utmaningar
 
-### Steg 2: Firebase Integration
-- Konfigurerade ett Firebase-projekt och installerade Firebase SDK.
-- Upprättade anslutning till Firestore i applikationen.
+### Mål
+Att förbättra översikten på utmaningssidan genom att separera alla tillgängliga utmaningar från de som användaren har slutfört. Detta gör det enklare för spelare att se sina framsteg och hitta nya utmaningar.
 
-### Steg 3: Spelarregistrering
-- Skapade ett registreringsformulär.
-- Implementerade logik för att spara nya spelare i Firestore och lagra deras ID lokalt.
+### Genomförda Steg
+1.  **Implementering av Tabb-komponent:** En ny `Tabs`-komponent skapades för att rendera två flikar: "Alla Utmaningar" och "Slutförda".
+2.  **Dynamisk Räknare:** Varje flik visar nu en räknare inom parentes som indikerar antalet utmaningar i den specifika vyn (t.ex., "Slutförda (5)").
+3.  **Filtrering av Data:** Logiken i `Challenges.jsx` uppdaterades för att hämta alla utmaningar och sedan filtrera dem i två separata listor baserat på användarens slutförda status.
+4.  **Refaktorisering:** Komponenten delades upp i mindre, mer specialiserade delar (`Tabs`, `ChallengeList`) för ökad läsbarhet och underhållbarhet.
+5.  **Styling av Tabbar:** Nya CSS-regler lades till i `App.css` för att ge flikarna en ren och modern design som är konsekvent med resten av applikationen.
 
-### Steg 4: Utmaningssida och Poängregistrering
-- Hämtade och visade utmaningar från Firestore.
-- Implementerade funktionalitet för att markera utmaningar som slutförda och uppdatera spelarens poäng.
-
-### Steg 5: Poängtavla
-- Skapade en topplista som hämtar och sorterar spelardata från Firestore.
-
-### Steg 6: Redigera Spelarinformation
-- Skapade en profilsida (`MyProfile.jsx`) där spelare kan redigera sina uppgifter.
-- Lade till en länk till profilsidan i navigeringen för inloggade spelare.
-
-### Steg 7: Refaktorering och Finputsning
-- **Styling:** Lade till en global CSS-fil (`index.css`) för ett enhetligt och modernt utseende.
-- **Felhantering:** Förbättrade felhanteringen i alla komponenter som interagerar med Firebase (`try...catch`), och lade till tydliga felmeddelanden till användaren.
-- **Navigering:** Byggde om `Layout.jsx` till att använda `NavLink` för att visuellt markera den aktiva sidan. Införde ett robustare system med `window.addEventListener` för att synkronisera inloggningsstatus över hela appen.
-- **Kodförbättringar:** Lade till en sidfot, en övergripande titel och småförbättrade texten på flera ställen för att öka tydligheten.
+Denna ändring ger en klarare och mer organiserad vy för spelarna, vilket förbättrar användarupplevelsen avsevärt.

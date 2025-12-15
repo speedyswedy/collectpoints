@@ -1,42 +1,346 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+
+:root {
+  /* Mossen Tema: Svart, Gul, Vit */
+  --mossen-yellow: #FFC72C;
+  --mossen-black: #121212;
+  --mossen-white: #FFFFFF;
+  --mossen-light-gray: #F5F5F5;
+  --mossen-medium-gray: #EAEAEA;
+  --mossen-dark-gray: #A9A9A9;
+
+  /* Alias för konsekvens */
+  --primary-color: var(--mossen-yellow);
+  --text-color: var(--mossen-black);
+  --background-color: var(--mossen-white);
+  --card-background: var(--mossen-white);
+  --border-color: var(--mossen-medium-gray);
+  --secondary-text-color: var(--mossen-dark-gray);
+
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+
+  --border-radius: 12px;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+  /* Boll-färger för poängtavlan */
+  --gold-color: #FFD700;
+  --silver-color: #C0C0C0;
+  --bronze-color: #CD7F32;
+  --gold-background: #FFF9E6;
+  --silver-background: #FAFAFA;
+  --bronze-background: #FFF5EC;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--mossen-light-gray);
+  color: var(--text-color);
+}
+
+.page-container {
+  max-width: 900px;
+  margin: 2rem auto;
   padding: 2rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2, h3 {
+  color: var(--text-color);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1 {
+  font-weight: 800;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.page-container > h1 {
+  border-bottom: 4px solid var(--primary-color);
+  display: inline-block;
+  padding-bottom: 8px;
+  margin-bottom: 2rem;
+}
+
+a {
+  color: var(--text-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+/* --- Knapp-stilar --- */
+.btn {
+  cursor: pointer;
+  padding: 12px 24px;
+  border: 2px solid var(--text-color);
+  border-radius: var(--border-radius);
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow);
+  background-color: var(--text-color);
+  color: var(--mossen-white);
+}
+
+.btn.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+}
+.btn.btn-primary:hover {
+    background-color: #FFB800;
+    box-shadow: 0 5px 15px rgba(255, 184, 0, 0.4);
+    color: var(--text-color);
+}
+
+.btn.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: var(--mossen-white);
+}
+.btn.btn-danger:hover {
+    background-color: #c82333;
+    color: var(--mossen-white);
+}
+
+.btn:disabled, .btn:disabled:hover {
+  border-color: var(--mossen-medium-gray);
+  color: var(--mossen-dark-gray);
+  background-color: var(--mossen-light-gray);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Kort & Formulär --- */
+.form-container, .challenge-item, .leaderboard-container {
+  background-color: var(--card-background);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 199, 44, 0.5);
+}
+
+.challenge-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 0; /* Ta bort marginal för att passa med tabbar */
+}
+
+.challenge-item {
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 0; /* Första item ska inte ha extra marginal */
+}
+
+/* Justera så att första challenge-item inte får dubbel marginal när tabbar finns */
+.tabs-container + .challenge-list > .challenge-item:first-child, .tabs-container + .empty-state-container {
+    margin-top: 2rem;
+}
+
+.challenge-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.challenge-item h3 {
+  margin-top: 0;
+  text-align: left;
+}
+
+.challenge-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 10px;
+}
+
+/* --- Flikar/Tabs för Utmaningar (NY DESIGN) --- */
+.tabs-container {
+  display: flex;
+  background-color: var(--mossen-medium-gray);
+  border-radius: var(--border-radius);
+  padding: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px 15px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--secondary-text-color);
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab-btn.active {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.tab-btn:not(.active):hover {
+  background-color: var(--mossen-dark-gray);
+  color: var(--mossen-white);
+}
+
+/* --- Tomma tillstånd (Empty States) --- */
+.empty-state-container {
+    background-color: var(--card-background);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--border-color);
+}
+
+/* --- Poängtavla --- */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.leaderboard-table thead {
+  background-color: var(--mossen-light-gray);
+}
+
+.leaderboard-table th {
+  color: var(--secondary-text-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.leaderboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderboard-table .rank {
+  width: 70px;
+  text-align: center;
+}
+
+.leaderboard-table .rank-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--secondary-text-color);
+}
+
+.ball-icon {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+}
+.ball-icon.gold { color: var(--gold-color); }
+.ball-icon.silver { color: var(--silver-color); }
+.ball-icon.bronze { color: var(--bronze-color); }
+
+.leaderboard-table .player-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.leaderboard-table .points {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text-color);
+  text-align: right;
+}
+
+.leaderboard-table tr.gold-row { background-color: var(--gold-background); }
+.leaderboard-table tr.silver-row { background-color: var(--silver-background); }
+.leaderboard-table tr.bronze-row { background-color: var(--bronze-background); }
+
+.empty-leaderboard {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--secondary-text-color);
+}
+
+/* Responsivitet */
+@media (max-width: 600px) {
+  .page-container {
+    padding: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+  .page-container > h1 {
+    font-size: 1.5rem;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 0.75rem;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .tabs-container {
+    margin-bottom: 1.5rem;
+  }
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 10px 8px;
+  }
 }
