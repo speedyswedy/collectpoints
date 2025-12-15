@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "collectpoints-481314"
+  },
   "targets": {},
   "etags": {}
 }
