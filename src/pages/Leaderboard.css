@@ -87,6 +87,11 @@
 
 /* Responsive styles for Mobile */
 @media (max-width: 480px) {
+    .leaderboard-container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
     .leaderboard-table td {
         white-space: normal; /* Allow text wrapping */
     }

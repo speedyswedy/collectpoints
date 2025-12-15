@@ -3,6 +3,18 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative; /* Needed for the overlay */
+}
+
+.layout.menu-open::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Below the header but above the content */
 }
 
 .app-header {
@@ -38,7 +50,7 @@
 .main-nav {
   display: none; /* Hidden by default */
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align items to the start */
   background-color: var(--mossen-white);
   position: absolute;
   top: 100%;
@@ -56,7 +68,7 @@
 .main-nav a {
   color: var(--mossen-black);
   text-decoration: none;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem;
   font-weight: 600;
   transition: all 0.2s ease;
   width: 100%;
@@ -64,7 +76,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.main-nav a:last-child {
+.main-nav a:last-of-type {
     border-bottom: none;
 }
 
@@ -79,6 +91,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
+  z-index: 1001; /* Make sure it's above the nav */
 }
 
 .menu-toggle .material-icons {
@@ -96,15 +109,15 @@
   gap: 0.75rem;
   padding: 1rem 1.5rem 0;
   border-top: 1px solid var(--border-color);
-  margin-top: 1rem;
+  margin-top: 1rem; /* Visually separates nav links from actions */
   width: 100%;
 }
 
 .user-actions-mobile .btn {
   width: 100%;
   text-align: center;
+  padding: 0.75rem 1rem;
 }
-
 
 .main-content {
   flex: 1;
@@ -120,6 +133,10 @@
 
 /* Tablet and Desktop Styles */
 @media (min-width: 768px) {
+  .layout.menu-open::before {
+    display: none; /* No overlay on desktop */
+  }
+
   .app-header {
     padding: 1rem 2rem;
   }
@@ -133,7 +150,7 @@
   }
 
   .main-nav {
-    display: flex;
+    display: flex !important; /* Override inline style */
     flex-direction: row;
     align-items: center;
     position: static;
@@ -153,15 +170,15 @@
   .menu-toggle {
     display: none;
   }
+  
+  .user-actions-mobile {
+      display: none;
+  }
 
   .user-actions-desktop {
     display: flex;
     align-items: center;
     gap: 1rem;
-  }
-  
-  .user-actions-mobile {
-      display: none;
   }
 
   .user-actions-desktop .user-link {

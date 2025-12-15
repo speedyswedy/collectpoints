@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="layout">
+    <div className={`layout ${isMenuOpen ? 'menu-open' : ''}`}>
       <header className="app-header">
         <div className="logo-container">
           <NavLink to="/" onClick={closeMenu}>
@@ -45,7 +45,9 @@ const Layout = ({ children }) => {
           {userRole === 'admin' && (
             <NavLink to="/create-challenge" onClick={closeMenu}>Skapa Utmaning</NavLink>
           )}
-           <div className="user-actions-mobile">
+
+          {/* User actions are now inside the main nav for a unified mobile menu */}
+          <div className="user-actions-mobile">
               {currentUser ? (
                 <>
                   <NavLink to="/my-profile" onClick={closeMenu}>Min Profil</NavLink>
@@ -60,6 +62,7 @@ const Layout = ({ children }) => {
           </div>
         </nav>
 
+        {/* Desktop user actions remain separate */}
         <div className="user-actions-desktop">
           {currentUser ? (
             <>
