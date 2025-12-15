@@ -6,6 +6,7 @@ const MyProfile = () => {
   const [player, setPlayer] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -23,6 +24,7 @@ const MyProfile = () => {
           setPlayer(playerData);
           setName(playerData.name);
           setEmail(playerData.email);
+          setRole(playerData.role);
         } else {
           setError('Kunde inte hitta din spelarprofil.');
         }
@@ -92,6 +94,15 @@ const MyProfile = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+          />
+        </div>
+        <div>
+          <label htmlFor="role">Roll:</label>
+          <input
+            type="text"
+            id="role"
+            value={role}
+            disabled
           />
         </div>
         {success && <p style={{ color: 'green' }}>{success}</p>}

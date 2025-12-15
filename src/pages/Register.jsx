@@ -25,7 +25,8 @@ const Register = () => {
         name: name,
         email: email,
         points: 0,
-        completedChallenges: []
+        completedChallenges: [],
+        role: 'player' // Automatically assign player role
       });
 
       // Spara ID i localStorage

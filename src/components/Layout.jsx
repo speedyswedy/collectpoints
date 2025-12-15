@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { db } from '../firebase/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Layout = ({ children }) => {
   const [playerId, setPlayerId] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    // Funktion för att uppdatera state från localStorage
-    const updatePlayerId = () => {
+    const updatePlayerIdAndRole = async () => {
       const storedPlayerId = localStorage.getItem('playerId');
       setPlayerId(storedPlayerId);
+
+      if (storedPlayerId) {
+        const docRef = doc(db, 'players', storedPlayerId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserRole(docSnap.data().role);
+        } else {
+          setUserRole(null);
+        }
+      } else {
+        setUserRole(null);
+      }
     };
 
-    updatePlayerId(); // Kör direkt vid montering
+    updatePlayerIdAndRole();
 
-    // Lyssna på custom event när playerId ändras (t.ex. vid registrering/utloggning)
-    window.addEventListener('playerIdChanged', updatePlayerId);
-
-    // Lyssna på storage event för synkning mellan flikar
-    window.addEventListener('storage', updatePlayerId);
+    window.addEventListener('playerIdChanged', updatePlayerIdAndRole);
+    window.addEventListener('storage', updatePlayerIdAndRole);
 
     return () => {
-      window.removeEventListener('playerIdChanged', updatePlayerId);
-      window.removeEventListener('storage', updatePlayerId);
+      window.removeEventListener('playerIdChanged', updatePlayerIdAndRole);
+      window.removeEventListener('storage', updatePlayerIdAndRole);
     };
   }, []);
 
@@ -46,9 +57,16 @@ const Layout = ({ children }) => {
               <NavLink to="/leaderboard">Poängtavla</NavLink>
             </li>
             {playerId && (
-              <li>
-                <NavLink to="/my-profile">Min Sida</NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink to="/my-profile">Min Sida</NavLink>
+                </li>
+                {userRole === 'admin' && (
+                  <li>
+                    <NavLink to="/create-challenge">Skapa Utmaning</NavLink>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         </nav>

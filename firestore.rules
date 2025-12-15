@@ -3,23 +3,16 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Allow public read access to challenges
     match /challenges/{challengeId} {
       allow read: if true;
-      allow write: if false; // Ingen ska kunna skriva nya utmaningar från klienten
+      allow create: if get(/databases/$(database)/documents/players/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // Allow anyone to create a player (register)
-    // Allow players to read the full leaderboard
     match /players/{playerId} {
       allow read: if true;
       allow create: if true;
 
-      // Allow a user to update their own document
-      // This rule is not fully secure without authentication,
-      // but for this project, we assume the client is trusted.
-      // A more secure version would involve checking a unique, secret token.
-      allow update, delete: if true; // För nu, tillåt alla att uppdatera
+      allow update, delete: if request.auth.uid == playerId;
     }
   }
 }
